@@ -6,6 +6,6 @@ import vue from '@vitejs/plugin-vue'
 //   plugins: [vue()],
 // })
 export default defineConfig({
-  base: "/relsy_yc_stat_front/", // 👈 имя репозитория
+  base: "/filial-stats-vue/", // 👈 имя репозитория
   plugins: [vue()],
 })

@@ -12,7 +12,8 @@
   "dependencies": {
     "vue": "^3.5.13"
   },
-  "homepage": "https://KurBig1410.github.io/relsy_yc_stat_front",
+  "homepage": "https://KurBig1410.github.io/filial-stats-vue",
+  
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.2",
     "gh-pages": "^6.3.0",
