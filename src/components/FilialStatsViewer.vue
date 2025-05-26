@@ -1,7 +1,8 @@
 <template>
   <div class="wrapper">
     <div class="header">
-      <h1>Рельсы-рельсы, Шпалы-Шпалы</h1>
+      <h1></h1>
+      <h1></h1>
 
       <div class="date-title-wrapper">
         <h1 class="title" @click="toggleCalendar">
@@ -141,7 +142,17 @@ export default {
       Telegram.WebApp.expand();
     }
 
-    fetch("https://api.relsy-relsy.com/api/data")
+    const today = new Date().toISOString().split("T")[0];
+    const lastMonth = new Date(Date.now() - 29 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+
+    const params = new URLSearchParams();
+    params.append("start", lastMonth);
+    params.append("end", today);
+
+    fetch(`https://api.relsy-relsy.com/api/data?${params.toString()}`)
+    // fetch(`http://0.0.0.0:8081/api/data?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
         this.tableData = data;
@@ -156,9 +167,34 @@ export default {
     toggleCalendar() {
       this.showCalendar = !this.showCalendar;
     },
+
+
+
+
     applyDateRange() {
       this.showCalendar = false;
+      this.loading = true;
+
+      const params = new URLSearchParams();
+      if (this.customStart) params.append("start", this.customStart);
+      if (this.customEnd) params.append("end", this.customEnd);
+
+    fetch(`https://api.relsy-relsy.com/api/data?${params.toString()}`)
+    // fetch(`http://0.0.0.0:8081/api/data?${params.toString()}`)
+        .then((res) => res.json())
+        .then((data) => {
+          this.tableData = data;
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error("Ошибка загрузки данных:", error);
+          this.loading = false;
+        });
     },
+
+
+
+
     toggleSortDropdown() {
       this.showSortDropdown = !this.showSortDropdown;
     },
@@ -196,7 +232,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   background: white;
-  color: #333;
+  color: #10627e;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   padding: 0.5rem;
@@ -249,7 +285,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background-image: url('src/assets/public/background.svg');
+  background-image: url('/background.svg');
   /* или '@/assets/background.svg' при импорте */
   background-size: cover;
   /* или contain, если нужно */
@@ -265,7 +301,8 @@ body {
 
 .header h1 {
   font-size: 1.2rem;
-  background: #4b5e5a;
+  /* background: #4b5e5a; */
+  color: black;
   padding: 0.8rem 1.2rem;
   border-radius: 20px;
   display: inline-block;
@@ -293,7 +330,7 @@ body {
 
 .rank-table th,
 .rank-table td {
-  background: #4b5e5a;
+  background: #10627e;
   padding: 1rem;
   text-align: center;
   border-radius: 12px;
@@ -323,6 +360,7 @@ body {
   gap: 0.6rem;
   justify-content: center;
   scrollbar-width: none;
+  border: none;
 }
 
 .filters::-webkit-scrollbar {
@@ -331,7 +369,7 @@ body {
 
 .filters button {
   padding: 0.6rem 1.2rem;
-  background: #87938f;
+  background: #10627e;
   /* border: none; */
   border-radius: 12px;
   /* box-shadow: 2px 2px 5px #bebebe, -2px -2px 5px #ffffff; */
@@ -342,7 +380,7 @@ body {
 }
 
 .filters button.active {
-  background: #bacac5;
+  background: rgb(212, 229, 223);
   /* color: white; */
   /* box-shadow: inset 2px 2px 5px #125a9c, inset -2px -2px 5px #2196f3; */
 }
